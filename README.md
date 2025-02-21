@@ -1,2 +1,3 @@
 # math-indicator-changer
-ChatGPT Math Indicator Changer.: latex style indicator \( \) and \[ \] to markdown style $ $ and $$ $$.
+**ChatGPT Math Indicator Changer:**
+Changes the latex style indicator in markdown from `\(...\)`  to `$...$` and `\[...\]` to `$$...$$` for inline and block respectively.
