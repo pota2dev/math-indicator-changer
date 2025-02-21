@@ -22,6 +22,20 @@
       font-size: 1em;
       cursor: pointer;
     }
+    /* Notification style */
+    #notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #444;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 1000;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -34,12 +48,30 @@
   </div>
   <h2>Converted Text</h2>
   <textarea id="outputText" placeholder="Converted text will appear here..." readonly></textarea>
+
+  <!-- Notification container -->
+  <div id="notification"></div>
   
   <script>
+    // Function to show notification messages that vanish automatically
+    function showNotification(message, duration = 2000) {
+      const notif = document.getElementById("notification");
+      notif.textContent = message;
+      notif.style.display = "block";
+      // Force a reflow so the transition applies
+      void notif.offsetWidth;
+      notif.style.opacity = "1";
+      
+      // Hide the notification after the duration
+      setTimeout(() => {
+        notif.style.opacity = "0";
+        setTimeout(() => { notif.style.display = "none"; }, 500);
+      }, duration);
+    }
+    
     // Function to convert LaTeX-style math to Markdown-style
     function convertMathIndicators(text) {
       // Convert block math: \[ ... \] -> $$ ... $$
-      // Using [\s\S]*? to match any character (including newlines) non-greedily
       text = text.replace(/\\\[((?:[\s\S]*?))\\\]/g, function(match, content) {
         return '$$' + content.trim() + '$$';
       });
@@ -64,11 +96,10 @@
       var outputField = document.getElementById('outputText');
       outputField.select();
       try {
-        // For modern browsers
         document.execCommand('copy');
-        alert('Copied to clipboard!');
+        showNotification('Copied to clipboard!');
       } catch (err) {
-        alert('Failed to copy text.');
+        showNotification('Failed to copy text.');
       }
     });
   </script>
