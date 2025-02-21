@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChatGPT Math Indicator Changer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>ChatGPT Math Indicator Changer</h1>
+  <p>Paste your text with LaTeX-style math indicators below:</p>
+  <textarea id="inputText" placeholder="Paste your text here..."></textarea>
+  <div>
+    <button id="convertButton">Convert</button>
+    <button id="copyButton">Copy Output</button>
+  </div>
+  <h2>Converted Text</h2>
+  <textarea id="outputText" placeholder="Converted text will appear here..." readonly></textarea>
+  
+  <script>
+    // Function to convert LaTeX-style math to Markdown-style
+    function convertMathIndicators(text) {
+      // Convert block math: \[ ... \] -> $$ ... $$
+      // Using [\s\S]*? to match any character (including newlines) non-greedily
+      text = text.replace(/\\\[((?:[\s\S]*?))\\\]/g, function(match, content) {
+        return '$$' + content.trim() + '$$';
+      });
+      
+      // Convert inline math: \( ... \) -> $ ... $
+      text = text.replace(/\\\((.*?)\\\)/g, function(match, content) {
+        return '$' + content.trim() + '$';
+      });
+      
+      return text;
+    }
+    
+    // Event listener for the convert button
+    document.getElementById('convertButton').addEventListener('click', function() {
+      var input = document.getElementById('inputText').value;
+      var converted = convertMathIndicators(input);
+      document.getElementById('outputText').value = converted;
+    });
+    
+    // Event listener for the copy button
+    document.getElementById('copyButton').addEventListener('click', function() {
+      var outputField = document.getElementById('outputText');
+      outputField.select();
+      try {
+        // For modern browsers
+        document.execCommand('copy');
+        alert('Copied to clipboard!');
+      } catch (err) {
+        alert('Failed to copy text.');
+      }
+    });
+  </script>
+</body>
+</html>
